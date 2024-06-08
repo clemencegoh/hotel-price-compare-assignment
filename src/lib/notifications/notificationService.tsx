@@ -1,4 +1,4 @@
-import {getReadableError} from "@/utils/error";
+import {getReadableError} from "@/utils/ErrorHandlers";
 import _ from "lodash";
 import {OptionsObject} from "notistack";
 

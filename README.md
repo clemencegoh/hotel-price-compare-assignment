@@ -16,3 +16,22 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
 
 
 ## Design & choice of technology
+- Storing/persistence of Currency
+  - Options here are to either put it in the URL (which makes sense for customers who come in via google search results)
+  - Or to put it in a datastore with persistent storage in the browser like localstorage 
+  - In this case I chose to go with the latter, using Zustand with persist middleware
+- Routing:
+  - With this being a small feature, I've opted to keep routing out of it, so it will be just a single page with dynamic changing parts.
+- Design library
+  - Tailwindcss + WindUI for copy & paste components, since choice of UI is freely given rather than having to implement from a figma or specific design
+
+
+## Points of struggle
+- Not exactly the best at determining what UI would look nice, so took awhile to settle on something
+
+
+## Feature list
+[x] Store/switch preferred currency, default to USD
+[ ] Display list of hotels with details
+[ ] Order list according to competitor rates
+[ ] popover component for showing disclaimer on tax-inclusive

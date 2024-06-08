@@ -1,4 +1,4 @@
-import { getReadableError } from '@/utils/error';
+import { getReadableError } from '@/utils/ErrorHandlers';
 import {DefaultOptions, QueryCache, QueryClient} from '@tanstack/react-query';
 import { showErrorNotification } from '../notifications/notificationService';
 
