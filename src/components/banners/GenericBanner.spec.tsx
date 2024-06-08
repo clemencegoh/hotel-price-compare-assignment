@@ -2,6 +2,7 @@ import {fireEvent, render} from "@testing-library/react";
 import GenericBanner from "./GenericBanner";
 import {useCurrencyStore} from "@/stores/currency-state";
 import {TestID} from "@/utils/testConstants";
+import {debug} from "jest-preview";
 
 jest.mock("@/stores/currency-state", () => ({
     useCurrencyStore: jest.fn(() => ({
@@ -38,7 +39,8 @@ describe("GenericBanner component", () => {
 
         fireEvent.click(currencyButton);
 
-        const dropdownMenu = component.getByRole("listbox");
+        debug();
+        const dropdownMenu = component.getByTestId(TestID.DROPDOWN_MENU_LABEL);
 
         expect(dropdownMenu).toBeDefined();
     });
@@ -56,10 +58,10 @@ describe("GenericBanner component", () => {
         fireEvent.click(currencyButton);
 
         const euroOption = component.getByTestId(
-            `${TestID.CURRENCY_OPTION}_EUR`
+            `${TestID.CURRENCY_OPTION}_KRW`
         );
         fireEvent.click(euroOption);
 
-        expect(mockSetCurrency).toHaveBeenCalledWith("EUR");
+        expect(mockSetCurrency).toHaveBeenCalledWith("KRW");
     });
 });

@@ -20,7 +20,7 @@ export default function GenericBanner({
     subtext,
 }: Readonly<TGenericBannerProps>) {
     const {currency, setCurrency} = useCurrencyStore();
-    console.log(currency);
+
     return (
         <header className="flex w-screen justify-between px-3 pt-2 items-center">
             <div id="name-and-description" className="">
@@ -36,7 +36,11 @@ export default function GenericBanner({
                         {currency}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel>Select Currency</DropdownMenuLabel>
+                        <DropdownMenuLabel
+                            data-testid={TestID.DROPDOWN_MENU_LABEL}
+                        >
+                            Select Currency
+                        </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {SUPPORTED_CURRENCIES.map((item) => (
                             <DropdownMenuItem
