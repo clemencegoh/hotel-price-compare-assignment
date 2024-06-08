@@ -22,9 +22,11 @@ export default function GenericBanner({
     const {currency, setCurrency} = useCurrencyStore();
 
     return (
-        <header className="flex w-screen justify-between px-3 pt-2 items-center">
+        <header className="flex w-full justify-between px-3 pt-2 items-center">
             <div id="name-and-description" className="">
-                <h1 className="tx-h1">{title}</h1>
+                <h1 className="tx-h1 text-xl font-bold text-primary">
+                    {title}
+                </h1>
                 <h3>{subtext}</h3>
             </div>
             <div id="currency-and-language" className="border-2 rounded-sm">
@@ -35,7 +37,7 @@ export default function GenericBanner({
                     >
                         {currency}
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent className="z-100 bg-white">
                         <DropdownMenuLabel
                             data-testid={TestID.DROPDOWN_MENU_LABEL}
                         >
@@ -45,7 +47,7 @@ export default function GenericBanner({
                         {SUPPORTED_CURRENCIES.map((item) => (
                             <DropdownMenuItem
                                 key={`${item}`}
-                                className="hover:cursor-pointer"
+                                className="pointer-events-auto hover:pointer hover:bg-backgroundSecondary hover:text-white"
                                 data-testid={`${TestID.CURRENCY_OPTION}_${item}`}
                                 onClick={() => {
                                     setCurrency(item);

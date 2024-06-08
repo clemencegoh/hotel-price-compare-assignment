@@ -1,4 +1,4 @@
-import { getReadableError } from '@/utils/ErrorHandlers';
+import { getReadableError } from '@/utils/errorHandlers';
 import {DefaultOptions, QueryCache, QueryClient} from '@tanstack/react-query';
 
 

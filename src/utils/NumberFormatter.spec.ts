@@ -1,4 +1,4 @@
-import { formatForCurrency } from "./NumberFormatters";
+import { formatForCurrency } from "./numberFormatters";
 
 
 describe('NumberFormatting', () => {

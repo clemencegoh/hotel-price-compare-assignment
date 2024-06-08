@@ -24,6 +24,8 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
   - With this being a small feature, I've opted to keep routing out of it, so it will be just a single page with dynamic changing parts.
 - Design library
   - Tailwindcss + WindUI for copy & paste components, since choice of UI is freely given rather than having to implement from a figma or specific design
+- Design inspiration
+  - Eventually took the design from booking.com, seems clean and straghtforward
 
 
 ## Points of struggle
@@ -33,5 +35,7 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
 ## Feature list
 [x] Store/switch preferred currency, default to USD
 [ ] Display list of hotels with details
-[ ] Order list according to competitor rates
-[ ] popover component for showing disclaimer on tax-inclusive
+[x] Show competitor comparison
+[x] show taxes and fees inclusive
+[x] round currency properly
+[x] show where we stand in ordering of cheapest to most expensive

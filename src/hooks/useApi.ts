@@ -1,7 +1,8 @@
 import { useToast } from "@/components/ui/use-toast";
-import { getReadableError } from "@/utils/ErrorHandlers";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect,  } from "react";
+import _ from 'lodash';
+import { getReadableError } from "@/utils/errorHandlers";
 
 
 export type HotelDto = {
@@ -34,7 +35,7 @@ export function useHotelData() {
 
   const dataURL = 'https://61c3e5d2f1af4a0017d99115.mockapi.io/hotels/tokyo';
 
-  const {data, error} = useQuery<HotelDto>({
+  const {data, error} = useQuery<HotelDto[]>({
     queryKey: ['hotels'],
     queryFn: () => genericFetch(dataURL)
   });
@@ -44,6 +45,7 @@ export function useHotelData() {
       toast({
         title: "Error fetching hotels data", 
         description: getReadableError(error),
+        className: "text-white bg-error",
       });
     }
   }, [error])
@@ -53,10 +55,10 @@ export function useHotelData() {
 
 export function usePriceData(currency: string, page: number = 1) {
   const {toast} = useToast();
-  
+
   const dataURL = `http://61c3e5d2f1af4a0017d99115.mockapi.io/hotels/tokyo/${page}/${currency}`;
 
-  const {data, error} = useQuery<CurrencyPriceDto>({
+  const {data, error} = useQuery<CurrencyPriceDto[]>({
     queryKey: ['hotel price', currency, page],
     queryFn: () => genericFetch(dataURL)
   });
@@ -66,6 +68,7 @@ export function usePriceData(currency: string, page: number = 1) {
       toast({
         title: "Error fetching prices data", 
         description: getReadableError(error),
+        className: "text-white bg-error",
       });
     }
   }, [error])
@@ -73,9 +76,13 @@ export function usePriceData(currency: string, page: number = 1) {
   return {data};
 }
 
-export function useCombinedHotelData(currency: string = 'USD', page: number = 1) {
+/**
+ * Combines data and returns as an object rather than an array.
+ * Trivial to turn back into an array or iterate based on key
+ */
+export function useCombinedHotelData(currency: string = 'USD', page: number = 1): Record<number, HotelDto & CurrencyPriceDto> {
   const {data: hotelData} = useHotelData();
   const {data: priceData} = usePriceData(currency, page);
 
-console.log(hotelData, priceData)
+  return _.merge(_.keyBy(hotelData, 'id'), _.keyBy(priceData, 'id'));
 }
