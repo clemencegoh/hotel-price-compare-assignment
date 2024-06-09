@@ -36,6 +36,7 @@ module.exports = {
             backgroundSecondary: '#1B212A',
             overlay: 'rgba(0, 0, 0, 0.8)',
 
+            tooltip: '#B0D5F9',
             surface: 'rgba(255, 255, 255, 0.06)',
             surfaceLight: 'rgba(255, 255, 255, 0.8)',
             surfaceTooltip: 'rgba(17, 24, 39, 0.8)',

@@ -1,6 +1,5 @@
 import {
     Card,
-    CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
@@ -12,20 +11,17 @@ import {formatForCurrency} from "@/utils/numberFormatters";
 import {useCurrencyStore} from "@/stores/currency-state";
 import {CURRENCY_SYMBOLS} from "@/utils/constants";
 import _ from "lodash";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-import Big from "big.js";
-import {doRiskyBigOperation} from "@/utils/numbers";
+import {useState} from "react";
+import DisplayTooltip from "./DisplayTooltip";
+import PriceWithComparison from "./PriceWithComparison";
 
 export type HotelDisplayCardProps = {
     data: HotelDto & CurrencyPriceDto;
 };
 
-export default function HotelDisplayCard({data}: HotelDisplayCardProps) {
+export default function HotelDisplayCard({
+    data,
+}: Readonly<HotelDisplayCardProps>) {
     const {
         photo,
         name,
@@ -40,47 +36,33 @@ export default function HotelDisplayCard({data}: HotelDisplayCardProps) {
     const parsedDescription = removeHTMLTags(description);
     const {currency} = useCurrencyStore();
 
-    console.log("tax and fees for ", currency, taxes_and_fees);
-
-    // find how cheap we are compared to the rest
-    const rankingByCheapness = competitors
-        ? Object.values(competitors).filter((competitor) => competitor < price)
-              .length
-        : 0;
-    const cheapRankingText = (rank: number) => {
-        switch (rank) {
-            case 0:
-                return "Cheapest Option!";
-            case 1:
-                return "2nd Cheapest Option";
-            case 2:
-                return "3rd Cheapest Option";
-            default:
-                return `${rank + 1}th Cheapest Option`;
-        }
+    const [showMore, setShowMore] = useState<boolean>(false);
+    const toggleShowMore = () => {
+        setShowMore(!showMore);
     };
 
     const mostExpensiveCompetitor = competitors
         ? _.max(Object.values(competitors))
         : undefined;
 
-    const savings = doRiskyBigOperation(() =>
-        new Big(mostExpensiveCompetitor ?? 0)
-            .minus(price)
-            .div(mostExpensiveCompetitor ?? 1)
-            .mul(100)
-    );
+    const BOOK_THROUGH_US_LABEL = "Book through us";
+
+    const competitorsIncludingUs = Object.entries({
+        ...competitors,
+        [BOOK_THROUGH_US_LABEL]: price,
+    }).sort(([, a], [, b]) => (a ?? 0) - (b ?? 0));
 
     return (
-        <Card className="flex py-2 pl-2">
+        <Card className="flex py-2 pl-2 items-start">
             <img
                 src={photo}
-                className="aspect-square bg-cover w-48 rounded-md"
+                className="h-48 w-48 object-cover rounded-md margin-auto"
             />
+
             <CardHeader>
                 <CardTitle className="flex justify-between gap-5">
                     <div className="flex gap-1 flex-1">
-                        {name}{" "}
+                        {name}
                         <StarRatings filledStars={stars} className="pt-1" />
                     </div>
 
@@ -90,82 +72,77 @@ export default function HotelDisplayCard({data}: HotelDisplayCardProps) {
                         </div>
                     </div>
                 </CardTitle>
-                <CardDescription>
-                    <a
-                        href={`https://maps.google.com/?q=${address}`}
-                        target="_blank"
-                        className="underline text-primary"
+                <a
+                    href={`https://maps.google.com/?q=${address}`}
+                    target="_blank"
+                    className="underline text-primary"
+                >
+                    {address}
+                </a>
+                <CardDescription className="flex">
+                    <span
+                        className={`text-ellipsis overflow-hidden ${
+                            showMore ? "" : "line-clamp-2"
+                        }`}
                     >
-                        {address}
-                    </a>
+                        {parsedDescription}
+                    </span>
+
+                    <button
+                        className="underline text-disabled text-nowrap flex items-end cursor-pointer"
+                        onClick={toggleShowMore}
+                    >
+                        Show {showMore ? "less" : "more"}
+                    </button>
                 </CardDescription>
-                <CardDescription className="text-ellipsis overflow-hidden line-clamp-2">
-                    {parsedDescription}
-                </CardDescription>
-                <CardContent className="w-full flex flex-col items-end">
+                <section className="w-full flex flex-col items-end">
                     <div className="flex gap-2">
-                        {mostExpensiveCompetitor && (
-                            <div className="rounded-md bg-positive text-white px-2 py-1">
-                                Save {savings.toFixed(2)}%
-                            </div>
-                        )}
-                        {mostExpensiveCompetitor && (
-                            <span className="text-negative line-through flex gap-1 text-sm flex items-center">
-                                {CURRENCY_SYMBOLS[currency ?? "USD"]}
-                                {formatForCurrency(
-                                    mostExpensiveCompetitor,
-                                    currency
-                                )}
-                            </span>
-                        )}
-                        {price ? (
-                            <h1 className="font-bold text-xl flex gap-1 items-center">
-                                {CURRENCY_SYMBOLS[currency ?? "USD"]}
-                                {formatForCurrency(price, currency)}
-                            </h1>
-                        ) : (
-                            <h1 className="text-error">Rates unavailable</h1>
-                        )}
+                        <PriceWithComparison
+                            price={price}
+                            mostExpensiveCompetitor={mostExpensiveCompetitor}
+                        />
                         {competitors ? (
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="size-6"
+                            <DisplayTooltip>
+                                {competitorsIncludingUs.map(
+                                    ([competitorName, competitorPrice]) => (
+                                        <div
+                                            key={competitorName}
+                                            className={`flex gap-1 ${
+                                                competitorName ===
+                                                BOOK_THROUGH_US_LABEL
+                                                    ? " font-bold"
+                                                    : " text-disabled"
+                                            }`}
+                                            id={competitorName}
                                         >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
-                                            />
-                                        </svg>
-                                    </TooltipTrigger>
-                                    <TooltipContent className="bg-white py-4 px-2 rounded-md border-1 border-black">
-                                        <p>
-                                            {cheapRankingText(
-                                                rankingByCheapness
-                                            )}
-                                        </p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
+                                            <span>{competitorName}:</span>
+                                            <span>
+                                                {
+                                                    CURRENCY_SYMBOLS[
+                                                        currency ?? "USD"
+                                                    ]
+                                                }
+                                                {formatForCurrency(
+                                                    competitorPrice ?? 0,
+                                                    currency
+                                                )}
+                                            </span>
+                                        </div>
+                                    )
+                                )}
+                            </DisplayTooltip>
                         ) : (
                             ""
                         )}
                     </div>
                     {taxes_and_fees ? (
-                        <div className="rounded-md text-sm text-disabled">
+                        <div className="rounded-md text-sm text-disabled mt-1">
                             Includes taxes and charges
                         </div>
                     ) : (
                         ""
                     )}
-                </CardContent>
+                </section>
             </CardHeader>
         </Card>
     );

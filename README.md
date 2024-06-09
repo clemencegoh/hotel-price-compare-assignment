@@ -34,8 +34,8 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
 
 ## Feature list
 [x] Store/switch preferred currency, default to USD
-[ ] Display list of hotels with details
-[x] Show competitor comparison
-[x] show taxes and fees inclusive
-[x] round currency properly
-[x] show where we stand in ordering of cheapest to most expensive
+[x] Display list of hotels with details  ==> Details done
+[x] Show competitor comparison ==> Shows all competitors if there are any
+[x] show taxes and fees inclusive  ==> will always show in text
+[x] round currency properly 
+[x] show where we stand in ordering of cheapest to most expensive  ==> similar to competitor comparison

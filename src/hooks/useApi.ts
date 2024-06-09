@@ -17,7 +17,7 @@ export type HotelDto = {
 
 export type CurrencyPriceDto = {
   id: number;
-  price: number;
+  price?: number;
   competitors?: Record<string, number>;
   taxes_and_fees?: {
       tax: number;
@@ -80,9 +80,16 @@ export function usePriceData(currency: string, page: number = 1) {
  * Combines data and returns as an object rather than an array.
  * Trivial to turn back into an array or iterate based on key
  */
-export function useCombinedHotelData(currency: string = 'USD', page: number = 1): Record<number, HotelDto & CurrencyPriceDto> {
+export function useCombinedHotelData(currency: string = 'USD', page: number = 1): Array<HotelDto & CurrencyPriceDto> {
   const {data: hotelData} = useHotelData();
   const {data: priceData} = usePriceData(currency, page);
 
-  return _.merge(_.keyBy(hotelData, 'id'), _.keyBy(priceData, 'id'));
+
+  return hotelData?.map(data => {
+    const priceForHotelData = priceData?.find(item => item.id === data.id);
+    return {
+      ...data,
+      ...priceForHotelData,
+    }
+  }) ?? [];
 }
