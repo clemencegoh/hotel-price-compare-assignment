@@ -16,3 +16,26 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
 
 
 ## Design & choice of technology
+- Storing/persistence of Currency
+  - Options here are to either put it in the URL (which makes sense for customers who come in via google search results)
+  - Or to put it in a datastore with persistent storage in the browser like localstorage 
+  - In this case I chose to go with the latter, using Zustand with persist middleware
+- Routing:
+  - With this being a small feature, I've opted to keep routing out of it, so it will be just a single page with dynamic changing parts.
+- Design library
+  - Tailwindcss + WindUI for copy & paste components, since choice of UI is freely given rather than having to implement from a figma or specific design
+- Design inspiration
+  - Eventually took the design from booking.com, seems clean and straghtforward
+
+
+## Points of struggle
+- Not exactly the best at determining what UI would look nice, so took awhile to settle on something
+
+
+## Feature list
+[x] Store/switch preferred currency, default to USD
+[x] Display list of hotels with details  ==> Details done
+[x] Show competitor comparison ==> Shows all competitors if there are any
+[x] show taxes and fees inclusive  ==> will always show in text
+[x] round currency properly 
+[x] show where we stand in ordering of cheapest to most expensive  ==> similar to competitor comparison

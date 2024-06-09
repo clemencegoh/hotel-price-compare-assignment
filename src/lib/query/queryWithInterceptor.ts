@@ -1,6 +1,5 @@
-import { getReadableError } from '@/utils/error';
+import { getReadableError } from '@/utils/errorHandlers';
 import {DefaultOptions, QueryCache, QueryClient} from '@tanstack/react-query';
-import { showErrorNotification } from '../notifications/notificationService';
 
 
 export default function customHookQueryWithInterceptor() {
@@ -10,7 +9,6 @@ export default function customHookQueryWithInterceptor() {
         console.error('unauthorized')
         return;
       }
-      showErrorNotification(getReadableError(error));
     };
 
     return new QueryClient({
