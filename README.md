@@ -32,10 +32,15 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
 - Not exactly the best at determining what UI would look nice, so took awhile to settle on something
 
 
-## Feature list
-[x] Store/switch preferred currency, default to USD
-[x] Display list of hotels with details  ==> Details done
-[x] Show competitor comparison ==> Shows all competitors if there are any
-[x] show taxes and fees inclusive  ==> will always show in text
-[x] round currency properly 
-[x] show where we stand in ordering of cheapest to most expensive  ==> similar to competitor comparison
+## Features list
+- Currency Switching
+  - [x] Store/switch preferred currency, default to USD
+  - [x] Round Currencies appropriately
+- Competitor Pricing
+  - [x] Do not show competitors or savings if no competitors
+  - [x] Do not show savings if competitors are all cheaper
+  - [x] Show savings over most expensive competitor's rates where applicable
+  - [x] Show relative positioning to competitors
+- Taxes & Fees
+  - [x] Highlight taxes & fees if included
+  - [x] Show asterisk with breakdown in popover

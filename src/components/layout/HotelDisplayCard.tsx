@@ -7,7 +7,7 @@ import {
 import {CurrencyPriceDto, HotelDto} from "@/hooks/useApi";
 import {removeHTMLTags} from "@/utils/htmlParser";
 import StarRatings from "../ratings/StarRatings";
-import {formatForCurrency} from "@/utils/numberFormatters";
+import {formatForCurrency} from "@/utils/NumberFormatters";
 import {useCurrencyStore} from "@/stores/currency-state";
 import {CURRENCY_SYMBOLS} from "@/utils/constants";
 import _ from "lodash";
@@ -136,9 +136,28 @@ export default function HotelDisplayCard({
                         )}
                     </div>
                     {taxes_and_fees ? (
-                        <div className="rounded-md text-sm text-disabled mt-1">
-                            Includes taxes and charges
-                        </div>
+                        <DisplayTooltip
+                            display={
+                                <div className="rounded-md text-sm text-disabled mt-1">
+                                    Includes taxes and charges *
+                                </div>
+                            }
+                        >
+                            {
+                                <div>
+                                    <h3>
+                                        Hotel Fees:{" "}
+                                        {CURRENCY_SYMBOLS[currency ?? "USD"]}
+                                        {taxes_and_fees.hotel_fees}
+                                    </h3>
+                                    <h3>
+                                        Tax:{" "}
+                                        {CURRENCY_SYMBOLS[currency ?? "USD"]}
+                                        {taxes_and_fees.tax}
+                                    </h3>
+                                </div>
+                            }
+                        </DisplayTooltip>
                     ) : (
                         ""
                     )}

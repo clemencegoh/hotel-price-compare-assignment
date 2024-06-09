@@ -2,7 +2,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect,  } from "react";
 import _ from 'lodash';
-import { getReadableError } from "@/utils/errorHandlers";
+import { getReadableError } from "@/utils/ErrorHandlers";
 
 
 export type HotelDto = {

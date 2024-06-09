@@ -1,6 +1,6 @@
 import {useCurrencyStore} from "@/stores/currency-state";
 import {CURRENCY_SYMBOLS} from "@/utils/constants";
-import {formatForCurrency} from "@/utils/numberFormatters";
+import {formatForCurrency} from "@/utils/NumberFormatters";
 import {doRiskyBigOperation} from "@/utils/numbers";
 import Big from "big.js";
 
