@@ -12,7 +12,7 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
 - if using `yarn`
   - `yarn install`
   - `yarn dev`
-- open `http://localhost:3000` to use the app
+- open `http://localhost:5173/` or `http://localhost:3000` (if you've used --port 3000) to use the app
 
 
 ## Design & choice of technology
