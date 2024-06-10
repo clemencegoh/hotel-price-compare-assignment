@@ -2,6 +2,9 @@
 Hotel Compare is a simplified app that compares prices for booking hotels between various booking sites, in your currency of choice.
 The aim is to be as transparent as possible, with taxes and fees being shown where applicable. This isn't always possible as some only add the taxes and fees after booking, resulting in a discrepency of hotel rates.
 
+## Preview
+![Preview image](./public/sample-image.png "Preview")
+
 
 ## How to start
 - either use `bun` or `yarn`, depending on choice of package manager
