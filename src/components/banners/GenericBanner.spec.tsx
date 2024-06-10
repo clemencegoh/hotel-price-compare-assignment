@@ -1,8 +1,8 @@
-import {fireEvent, render} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import GenericBanner from "./GenericBanner";
 import {useCurrencyStore} from "@/stores/currency-state";
 import {TestID} from "@/utils/testConstants";
-import {debug} from "jest-preview";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("@/stores/currency-state", () => ({
     useCurrencyStore: jest.fn(() => ({
@@ -32,20 +32,20 @@ describe("GenericBanner component", () => {
         expect(currencyElement).toBeDefined();
     });
 
-    it("opens currency dropdown on button click", () => {
+    it("opens currency dropdown on button click", async () => {
         const component = render(<GenericBanner title="My Banner" />);
 
         const currencyButton = component.getByTestId(TestID.CURRENCY_BUTTON);
 
-        fireEvent.click(currencyButton);
+        // @ts-expect-error: radix-ui's Dropdown uses Pointer-touch exclusively now
+        await userEvent.click(currencyButton, {pointerType: "touch"});
 
-        debug();
         const dropdownMenu = component.getByTestId(TestID.DROPDOWN_MENU_LABEL);
 
         expect(dropdownMenu).toBeDefined();
     });
 
-    it("calls setCurrency on currency option click", () => {
+    it("calls setCurrency on currency option click", async () => {
         const mockSetCurrency = jest.fn();
         jest.mocked(useCurrencyStore).mockReturnValue({
             currency: "USD",
@@ -55,12 +55,14 @@ describe("GenericBanner component", () => {
         const component = render(<GenericBanner title="My Banner" />);
 
         const currencyButton = component.getByTestId(TestID.CURRENCY_BUTTON);
-        fireEvent.click(currencyButton);
+
+        // @ts-expect-error: radix-ui's Dropdown uses Pointer-touch exclusively now
+        await userEvent.click(currencyButton, {pointerType: "touch"});
 
         const euroOption = component.getByTestId(
             `${TestID.CURRENCY_OPTION}_KRW`
         );
-        fireEvent.click(euroOption);
+        await userEvent.click(euroOption);
 
         expect(mockSetCurrency).toHaveBeenCalledWith("KRW");
     });

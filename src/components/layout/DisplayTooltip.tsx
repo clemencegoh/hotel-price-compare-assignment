@@ -6,6 +6,7 @@ import {
     TooltipTrigger,
 } from "../ui/tooltip";
 import {BaseProps} from "@/utils/props";
+import {TestID} from "@/utils/testConstants";
 
 export type TDisplayTooltipProps = BaseProps & {
     display?: React.ReactNode;
@@ -18,8 +19,10 @@ export default function DisplayTooltip({
     return (
         <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger>
-                    {display ?? (
+                <TooltipTrigger data-testid={TestID.TOOLTIP_BUTTON}>
+                    {display ? (
+                        display
+                    ) : (
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -27,6 +30,7 @@ export default function DisplayTooltip({
                             strokeWidth={1.5}
                             stroke="currentColor"
                             className="size-6"
+                            data-testid={TestID.TOOLTIP_DEFAULT_ICON}
                         >
                             <path
                                 strokeLinecap="round"
@@ -36,7 +40,10 @@ export default function DisplayTooltip({
                         </svg>
                     )}
                 </TooltipTrigger>
-                <TooltipContent className="bg-white py-4 px-4 py-2 rounded-md bg-[#7bb6f1] max-h-40 overflow-auto">
+                <TooltipContent
+                    data-testid={TestID.TOOLTIP_CONTENT}
+                    className="bg-white py-4 px-4 py-2 rounded-md bg-[#7bb6f1] max-h-40 overflow-auto"
+                >
                     {children}
                 </TooltipContent>
             </Tooltip>

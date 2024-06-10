@@ -5,6 +5,7 @@ module.exports = {
     '\\.svg$': '<rootDir>/src/__mocks__/svg.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  setupFilesAfterEnv: ['./src/test/setupTests.ts'],
   testEnvironment: 'jsdom',
   collectCoverage: true,
   collectCoverageFrom: [
