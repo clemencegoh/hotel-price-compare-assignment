@@ -30,6 +30,18 @@ The aim is to be as transparent as possible, with taxes and fees being shown whe
 - Design inspiration
   - Eventually took the design from booking.com, seems clean and straghtforward
 
+## Testing
+- Tests are written using jest for unit and integration tests
+- Cypress can be used for e2e, but would not be meaningful in this case as there are no "golden user paths"
+
+## Security
+- Usually to save across browsers some kind of backend would be needed with a database to store user details so we can figure out
+what currency the user is using across different platform (web or mobile web)
+- In this case opted against using any kind of backend since that delves into further complicating the app
+
+## Logging & Monitoring
+- Sentry would be a good choice for logging, since it allows viewing of sessions and has webhooks for alerting when an error/errorneous behaviour
+is detected.
 
 ## Points of struggle
 - Not exactly the best at determining what UI would look nice, so took awhile to settle on something
