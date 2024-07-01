@@ -1,6 +1,6 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect,  } from "react";
+import { useEffect, useState,  } from "react";
 import _ from 'lodash';
 import { getReadableError } from "@/utils/ErrorHandlers";
 
@@ -35,7 +35,7 @@ export function useHotelData() {
 
   const dataURL = 'https://61c3e5d2f1af4a0017d99115.mockapi.io/hotels/tokyo';
 
-  const {data, error} = useQuery<HotelDto[]>({
+  const {error, ...rest} = useQuery<HotelDto[]>({
     queryKey: ['hotels'],
     queryFn: () => genericFetch(dataURL)
   });
@@ -50,7 +50,7 @@ export function useHotelData() {
     }
   }, [error])
 
-  return {data};
+  return {error, ...rest};
 }
 
 export function usePriceData(currency: string, page: number = 1) {
@@ -58,7 +58,7 @@ export function usePriceData(currency: string, page: number = 1) {
 
   const dataURL = `http://61c3e5d2f1af4a0017d99115.mockapi.io/hotels/tokyo/${page}/${currency}`;
 
-  const {data, error} = useQuery<CurrencyPriceDto[]>({
+  const {data, error, isLoading} = useQuery<CurrencyPriceDto[]>({
     queryKey: ['hotel price', currency, page],
     queryFn: () => genericFetch(dataURL)
   });
@@ -73,23 +73,33 @@ export function usePriceData(currency: string, page: number = 1) {
     }
   }, [error])
 
-  return {data};
+  return {data, isLoading};
 }
 
 /**
  * Combines data and returns as an object rather than an array.
  * Trivial to turn back into an array or iterate based on key
  */
-export function useCombinedHotelData(currency: string = 'USD', page: number = 1): Array<HotelDto & CurrencyPriceDto> {
-  const {data: hotelData} = useHotelData();
-  const {data: priceData} = usePriceData(currency, page);
+export function useCombinedHotelData(currency: string = 'USD', page: number = 1) {
+  const [combinedData, setCombinedData] = useState<(CurrencyPriceDto & HotelDto)[]>([]);
 
+  const {data: hotelData, isLoading: hotelDataLoading} = useHotelData();
+  const {data: priceData, isLoading: priceDataLoading} = usePriceData(currency, page);
 
-  return hotelData?.map(data => {
-    const priceForHotelData = priceData?.find(item => item.id === data.id);
-    return {
-      ...data,
-      ...priceForHotelData,
+  useEffect(() => {
+    if (hotelData && hotelData?.length > 0 &&  priceData && priceData?.length > 0) {
+      const newCombinedData = hotelData?.map(data => {
+        const priceForHotelData = priceData?.find(item => item.id === data.id);
+        return {
+          ...data,
+          ...priceForHotelData,
+        }
+      });
+      setCombinedData(newCombinedData ?? []);
     }
-  }) ?? [];
+    
+  }, [hotelData, priceData])
+
+
+  return {combinedData, isLoading: hotelDataLoading || priceDataLoading} as const;
 }

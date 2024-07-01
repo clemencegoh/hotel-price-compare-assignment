@@ -7,10 +7,12 @@ import {useCurrencyStore} from "@/stores/currency-state";
 export default function HotelComparePage() {
     const {currency} = useCurrencyStore();
 
-    const data = useCombinedHotelData(currency);
+    const {combinedData, isLoading} = useCombinedHotelData(currency);
 
     // feature: do not display hotels where details don't exist
-    let filteredData = data.filter((item) => !!item.name && !!item.description);
+    let filteredData = combinedData.filter(
+        (item) => !!item.name && !!item.description
+    );
 
     // feature: move to back if price not present
     const sortedData = filteredData.sort((a, b) => {
@@ -27,7 +29,11 @@ export default function HotelComparePage() {
             <main className="flex flex-col gap-2 px-2 items-center">
                 {sortedData.length > 0 ? (
                     sortedData?.map((item) => (
-                        <HotelDisplayCard data={item} key={item.id} />
+                        <HotelDisplayCard
+                            data={item}
+                            key={item.id}
+                            priceLoading={isLoading}
+                        />
                     ))
                 ) : (
                     <Loading />

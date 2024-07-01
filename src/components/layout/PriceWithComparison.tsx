@@ -2,6 +2,7 @@ import {useCurrencyStore} from "@/stores/currency-state";
 import {CURRENCY_SYMBOLS} from "@/utils/constants";
 import {formatForCurrency} from "@/utils/NumberFormatters";
 import {doRiskyBigOperation} from "@/utils/numbers";
+import {TestID} from "@/utils/testConstants";
 import Big from "big.js";
 
 export type TPriceWithComparisonProps = {
@@ -34,12 +35,20 @@ export default function PriceWithComparison({
                 </span>
             )}
             {price ? (
-                <h1 className="font-bold text-xl flex gap-1 items-center">
+                <h1
+                    className="font-bold text-xl flex gap-1 items-center"
+                    data-testid={TestID.ACTUAL_PRICE}
+                >
                     {CURRENCY_SYMBOLS[currency ?? "USD"]}
                     {formatForCurrency(price, currency)}
                 </h1>
             ) : (
-                <h1 className="text-error">Rates unavailable</h1>
+                <h1
+                    className="text-error"
+                    data-testid={TestID.RATES_UNAVAILABLE}
+                >
+                    Rates unavailable
+                </h1>
             )}
         </>
     );

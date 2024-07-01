@@ -14,13 +14,16 @@ import _ from "lodash";
 import {useState} from "react";
 import DisplayTooltip from "./DisplayTooltip";
 import PriceWithComparison from "./PriceWithComparison";
+import Loading from "../loader/Loading";
 
 export type HotelDisplayCardProps = {
     data: HotelDto & CurrencyPriceDto;
+    priceLoading?: boolean;
 };
 
 export default function HotelDisplayCard({
     data,
+    priceLoading,
 }: Readonly<HotelDisplayCardProps>) {
     const {
         photo,
@@ -97,10 +100,16 @@ export default function HotelDisplayCard({
                 </CardDescription>
                 <section className="w-full flex flex-col items-end">
                     <div className="flex gap-2">
-                        <PriceWithComparison
-                            price={price}
-                            mostExpensiveCompetitor={mostExpensiveCompetitor}
-                        />
+                        {priceLoading ? (
+                            <Loading />
+                        ) : (
+                            <PriceWithComparison
+                                price={price}
+                                mostExpensiveCompetitor={
+                                    mostExpensiveCompetitor
+                                }
+                            />
+                        )}
                         {competitors ? (
                             <DisplayTooltip>
                                 {competitorsIncludingUs.map(
